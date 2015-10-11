@@ -1,0 +1,48 @@
+<h1>Events</h1>
+
+<table class="table table-hover">
+  <% @events.each do |event| %>
+    <tr>
+      <td><%= event.title %></td>
+      <td><%= event.creator.full_name %></td>
+      <% this_attend_event = AttendEvent.find_by user_id: current_user.id, event_id: event.id %>
+      <% if this_attend_event %>
+        <td>
+          <% if this_attend_event.approved %>
+            <%= this_attend_event.hours %> Hours Approved 
+          <% else %>
+            <%= this_attend_event.hours %> Hours Requested
+            <%= link_to '(Edit)', edit_attend_event_path(this_attend_event) %>
+          <% end %>
+        </td>
+      <% else %>
+        <td><%= link_to 'Request Hours', '/attend_events/'+event.id.to_s+'/new' %></td>
+      <% end %>
+      <% if event.creator == current_user %>
+        <td><%= link_to 'Edit', edit_event_path(event) %></td>
+        <td><%= link_to 'Destroy', event, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+
+<% if @approval_requests %>
+<h1>Approval Requests</h1>
+<table class="table table-hover">
+  <% @approval_requests.each do |approval_request| %>
+    <tr>
+      <td><%= approval_request.user.full_name %></td>
+      <td><%= approval_request.hours %></td>
+      <td><%= approval_request.event.title %></td>
+      <td><%= link_to 'Approve', '/approve/'+approval_request.id.to_s %></td>
+      <td><%= link_to 'Deny', '/deny/'+approval_request.id.to_s %></td>
+    </tr>
+  <% end %>
+</table>
+<% end %>
+
+<br>
+
+<ul class="nav">
+  <li><%= link_to 'New Event', new_event_path, class: 'btn btn-default' %></li>
+</ul>

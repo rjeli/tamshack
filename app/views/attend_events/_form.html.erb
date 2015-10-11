@@ -1,0 +1,25 @@
+<%= form_for(@attend_event) do |f| %>
+  <% if @attend_event.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@attend_event.errors.count, "error") %> prohibited this attend_event from being saved:</h2>
+
+      <ul>
+      <% @attend_event.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :hours, 'Hours', class: 'control-label'%>
+    <%= f.number_field :hours, class: 'form-control' %>
+  </div>
+
+  <%= hidden_field_tag :event_id, params[:id] %> 
+
+  <div class="form-group">
+    <%= f.submit "Request", class: 'btn btn-primary' %>
+  </div>
+
+<% end %>
